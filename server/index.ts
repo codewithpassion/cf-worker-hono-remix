@@ -7,6 +7,10 @@ const app = new Hono();
 
 let handler: RequestHandler | undefined
 
+app.get('/api', async (c) => {
+	return c.json({ hello: 'world' })
+})
+
 app.use(
 	async (c, next) => {
 		if (process.env.NODE_ENV !== 'development' || import.meta.env.PROD) {
