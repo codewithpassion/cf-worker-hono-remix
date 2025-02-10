@@ -1,4 +1,4 @@
-# Welcome to Remix + Cloudflare Workers!
+# Welcome to Remix + Hono + Cloudflare Workers!
 
 - 📖 [Remix docs](https://remix.run/docs)
 - 📖 [Remix Cloudflare docs](https://remix.run/guides/vite#cloudflare)
