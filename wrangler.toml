@@ -1,12 +1,14 @@
 #:schema node_modules/wrangler/config-schema.json
 # For more details on how to configure Wrangler, refer to:
 # https://developers.cloudflare.com/workers/wrangler/configuration/
-name = "my-remix-app"
+name = "summer-dream"
 compatibility_date = "2025-02-04"
-main = "./server.ts"
+main = "./server/index.ts"
 
 [assets]
 directory = "./build/client"
+binding = "ASSETS"
+
 
 [observability]
 enabled = true
