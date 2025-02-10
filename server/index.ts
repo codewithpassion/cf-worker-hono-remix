@@ -2,13 +2,43 @@ import { Hono } from "hono";
 import { reactRouter as remix } from 'remix-hono/handler'
 import type { AppLoadContext, RequestHandler } from '@remix-run/cloudflare'
 import { staticAssets } from "./staticAssets";
+import { Database, usersTable } from "@prtctyai/database";
+import type { DbEnv } from "@prtctyai/database";
+import { DurableObject } from "@cloudflare/workers-types/experimental";
+// import { DurableObject } from 'cloudflare:workers'
 
-const app = new Hono();
+// // export { DatabaseObject } from "@prtctyai/database";
+// export class DatabaseObject extends DurableObject {
+
+// }
+
+
+type AppType =  {
+	Variables: {},
+	Bindings: {} & DbEnv
+}
+
+const app = new Hono<AppType>();
 
 let handler: RequestHandler | undefined
 
 app.get('/api', async (c) => {
+	const db = Database.get(c.env)
+	db.insert(usersTable).values({
+				name: 'John',
+			age: 30,
+			email: 'john@example.com',
+		});
+	// const db = Database.get(c.env)
+	// await db.insert({
+	// 		name: 'John',
+	// 		age: 30,
+	// 		email: 'john@example.com',
+	// 	});
+	// 	console.log('New user created!');
+
 	return c.json({ hello: 'world' })
+
 })
 
 app.use(

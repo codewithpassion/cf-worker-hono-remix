@@ -38,14 +38,17 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   ssr: {
+    external: ["cloudflare:workers"],
     resolve: {
       conditions: ["workerd", "worker", "browser"],
     },
   },
+
   resolve: {
     mainFields: ["browser", "module", "main"],
   },
   build: {
     minify: true,
+    dynamicImportVarsOptions: {exclude: ["cloudflare:workers"]}
   },
 });

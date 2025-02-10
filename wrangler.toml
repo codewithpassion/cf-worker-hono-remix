@@ -5,6 +5,7 @@ name = "summer-dream"
 compatibility_date = "2025-02-04"
 main = "./server/index.ts"
 
+
 [assets]
 directory = "./build/client"
 binding = "ASSETS"
@@ -12,6 +13,29 @@ binding = "ASSETS"
 
 [observability]
 enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "YOUR DB NAME"
+database_id = "YOUR DB ID"
+migrations_dir = "packages/database/db/migrations"
+
+
+[[durable_objects.bindings]]
+name = "DATABASE_OBJECT"
+class_name = "DatabaseObject"
+script_name = "worker-name"
+
+# # Durable Object migrations.
+# # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#migrations
+# [[migrations]]
+# tag = "v1"
+# new_sqlite_classes = ["DatabaseObject"]
+# We need rules so we can import migrations in the next steps
+[[rules]] 
+type = "Text"
+globs = ["**/*.sql"]
+fallthrough = true
 
 # Smart Placement
 # Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
