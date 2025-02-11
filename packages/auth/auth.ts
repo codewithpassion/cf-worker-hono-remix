@@ -1,4 +1,5 @@
 import { type Context, Hono } from "hono";
+import { z } from "zod";
 import { sign, verify } from "hono/jwt";
 import { UserRepo } from "./repo/user-repo";
 import { randomBytes } from "crypto";
@@ -9,6 +10,15 @@ import { emailSenderMiddleware } from "./middleware";
 import { TokensRepo } from "./repo/token-repo";
 
 const AppName = "Test App";
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  redirectTo: z.string().url().optional(),
+});
+
+const magicSchema = z.object({
+  token: z.string().min(1)
+});
 
 const app = new Hono<AppType>();
 
@@ -35,13 +45,14 @@ function getRoles(user: User) {
 // Login endpoint
 app.post("/login", async (c) => {
   const body = await c.req.json();
-  const { email, redirectTo } = body as { email?: string; project?: string; redirectTo?: string };
-  const unauthorized = c.json({ error: "Unauthorized" }, 401);
-
-  if (!email) {
-    console.log("Email is required, body", body);
-    return unauthorized;
+  const result = loginSchema.safeParse(body);
+  
+  if (!result.success) {
+    return c.json({ error: result.error.issues }, 400);
   }
+
+  const { email, redirectTo } = result.data;
+  const unauthorized = c.json({ error: "Unauthorized" }, 401);
 
   const usersRepo = new UserRepo(c.var.Database);
   const user = await usersRepo.findByEmail(email);
@@ -78,12 +89,15 @@ app.post("/login", async (c) => {
 });
 
 app.post("/magic", async (c) => {
-  const { token } = await c.req.json();
-  const unauthorized = c.json({ error: "Unauthorized" }, 401);
-
-  if (!token) {
-    return c.json({ error: "Token is required" }, 400);
+  const body = await c.req.json();
+  const result = magicSchema.safeParse(body);
+  
+  if (!result.success) {
+    return c.json({ error: result.error.issues }, 400);
   }
+
+  const { token } = result.data;
+  const unauthorized = c.json({ error: "Unauthorized" }, 401);
 
   try {
     console.info("Validating Magic link token", token);
