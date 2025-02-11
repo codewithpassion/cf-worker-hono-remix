@@ -4,7 +4,7 @@ import { eq} from 'drizzle-orm';
 export class UserRepo {
     constructor(private database: Database) {}
 
-    async findByEamil(email: string) {
+    async findByEmail(email: string) {
         return this.database
             .select().from(users)
             .where(eq(users.email, email))
