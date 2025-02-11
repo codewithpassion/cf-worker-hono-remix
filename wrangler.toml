@@ -32,6 +32,11 @@ type = "Text"
 globs = ["**/*.sql"]
 fallthrough = true
 
+[[kv_namespaces]]
+binding = "SESSSIONS"
+id = "4bdd1301a44d4c978d9f605575610aa9"
+
+
 # Smart Placement
 # Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
 # [placement]
@@ -46,8 +51,8 @@ fallthrough = true
 
 # Environment Variables
 # https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+JWT_SECRET = "production_value"
 
 # Note: Use secrets to store sensitive data.
 # https://developers.cloudflare.com/workers/configuration/secrets/

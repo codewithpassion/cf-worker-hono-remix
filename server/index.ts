@@ -2,18 +2,44 @@ import { Hono } from "hono";
 import { reactRouter as remix } from 'remix-hono/handler'
 import type { AppLoadContext, RequestHandler } from '@remix-run/cloudflare'
 import { staticAssets } from "./staticAssets";
-import { DbMiddleware, users, type DbEnv, type DBVariables } from "@prtctyai/database";
+import { DbMiddleware, users, type DatabaseBindings, type DBVariables } from "@prtctyai/database";
 import { auth } from "@prtctyai/auth";
+import { UserRepo } from "packages/auth/repo/user-repo";
+import { EmailSenderMiddleware } from "packages/auth/middleware";
+import { EmailSender } from "packages/auth/email/sender";
+import { TokensRepo } from "packages/auth/repo/token-repo";
+import { MagicLinksRepo } from "packages/auth/repo/magic-links-repo";
+import { createMiddleware } from "hono/factory";
+
+export type AppBindings = {
+	EmailSender: EmailSender,
+	Repositories: {
+		user: UserRepo,
+		token: TokensRepo,
+		magicLinks: MagicLinksRepo
+	}
+} & DatabaseBindings
 
 type AppType =  {
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	Variables: {} & DBVariables,
+	Variables: {} & DBVariables & Env,
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	Bindings: {} & DbEnv
+	Bindings: AppBindings
 } 
+
+const RepoMiddleware = createMiddleware(async (c, next) => {
+	c.set( 'Repositories', {
+		user: new UserRepo(c.var.Database),
+		token: new TokensRepo(c.var.Database),
+		magicLinks: new MagicLinksRepo(c.var.Database)
+	})
+	await next()
+})
 
 const app = new Hono<AppType>();
 app.use(DbMiddleware);
+app.use(EmailSenderMiddleware);
+app.use(RepoMiddleware);
 
 let handler: RequestHandler | undefined
 
@@ -23,6 +49,14 @@ app.get('/api', async (c) => {
 	const foo = await c.var.Database.select().from(users).all();
 	return c.json({ hello: 'world', foo})
 })
+
+app.post("/api/seed", async (c) => {
+	const db = c.var.Database;
+	const usersRepo = new UserRepo(db);
+	return await usersRepo.seed().then(res => {
+		return c.json({ success: res });
+	})
+});
 
 app.use(
 	async (c, next) => {
@@ -44,8 +78,9 @@ app.use(
 				getLoadContext(c) {
 					return {
 						cloudflare: {
-							env: c.env
-						}
+							env: c.env,
+							var: c.var,
+						},
 					}
 				}
 			})(c, next)
@@ -59,8 +94,9 @@ app.use(
 			}
 			const remixContext = {
 				cloudflare: {
-					env: c.env
-				}
+					env: c.env,
+					var: c.var,				
+				},
 			} as unknown as AppLoadContext
 			return handler(c.req.raw, remixContext)
 		}

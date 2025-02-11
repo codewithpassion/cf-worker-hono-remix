@@ -17,23 +17,26 @@
     "drizzle:apply:local": "wrangler d1 migrations apply App --local"
   },
   "dependencies": {
-    "@prtctyai/database": "workspace:*",
     "@prtctyai/auth": "workspace:*",
+    "@prtctyai/database": "workspace:*",
     "@react-router/cloudflare": "^7.1.5",
     "@remix-run/cloudflare": "^2.15.3",
     "@remix-run/react": "^2.15.3",
     "@remix-run/server-runtime": "^2.15.3",
     "isbot": "^4.4.0",
+    "jsonwebtoken": "^9.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.1.5",
     "remix-hono": "^0.0.18",
-    "vite-plugin-cloudflare": "^0.4.1"
+    "vite-plugin-cloudflare": "^0.4.1",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250204.0",
     "@hono/vite-dev-server": "^0.18.1",
     "@remix-run/dev": "^2.15.3",
+    "@types/jsonwebtoken": "^9.0.8",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

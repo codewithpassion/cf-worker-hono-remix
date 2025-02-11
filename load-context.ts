@@ -1,3 +1,4 @@
+import { AppBindings } from "server";
 import { type PlatformProxy } from "wrangler";
 
 type GetLoadContextArgs = {
@@ -6,6 +7,7 @@ type GetLoadContextArgs = {
     cloudflare: Omit<PlatformProxy<Env>, "dispose" | "caches" | "cf"> & {
       caches: PlatformProxy<Env>["caches"] | CacheStorage;
       cf: Request["cf"];
+      var: AppBindings
     };
   };
 };

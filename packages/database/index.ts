@@ -9,3 +9,12 @@ export const takeUniqueOrThrow = (message: string) => {
         return values[0]!;
     };
 }
+
+export const takeUniqueOrNull = () => {
+    return <T>(values: T[]): T | null => {
+        if (values.length !== 1) {
+            return null
+        }
+        return values[0]!;
+    };
+}

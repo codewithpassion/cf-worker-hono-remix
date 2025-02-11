@@ -6,7 +6,7 @@ import { randomBytes } from "crypto";
 import { MagicLinksRepo } from "./repo/magic-links-repo";
 import type { User } from "@prtctyai/database";
 import type { AppType } from "./types";
-import { emailSenderMiddleware } from "./middleware";
+import { EmailSenderMiddleware } from "./middleware";
 import { TokensRepo } from "./repo/token-repo";
 
 const AppName = "Test App";
@@ -22,12 +22,12 @@ const magicSchema = z.object({
 
 const app = new Hono<AppType>();
 
-app.use(emailSenderMiddleware);
+app.use(EmailSenderMiddleware);
 
 const magicLinkValiditySeconds = 60 * 15; // 15 minutes
 const superAdmins = ["dominik@portcity-ai.com"];
 
-function getRoles(user: User) {
+export function getRoles(user: User) {
   const roles = [];
 
   if (superAdmins.includes(user.email)) {

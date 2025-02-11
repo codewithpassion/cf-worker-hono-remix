@@ -1,4 +1,4 @@
-import { takeUniqueOrThrow, type Database } from '@prtctyai/database';
+import { takeUniqueOrNull, takeUniqueOrThrow, type Database } from '@prtctyai/database';
 import { magicLinks } from '@prtctyai/database/db/schema';
 import { eq} from 'drizzle-orm';
 
@@ -24,6 +24,6 @@ export class MagicLinksRepo {
         return this.database
             .select().from(magicLinks)
             .where(eq(magicLinks.token, token))
-            .then(takeUniqueOrThrow(`Magic link with token ${token}`));
+            .then(takeUniqueOrNull());
     }  
 }
