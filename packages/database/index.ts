@@ -1,3 +1,11 @@
-export { Database } from './DatabaseObject';
-export type { DbEnv } from './DatabaseObject';
-export { usersTable } from './db/schema';
+export type { DatabaseBindings, DBVariables, Database } from './Database';
+export { DbMiddleware } from './Middleware';
+export { users, tokens, type User, type Token } from './db/schema';
+
+export const takeUniqueOrThrow = (message: string) => {
+    return <T>(values: T[]): T => {
+        if (values.length !== 1)
+            throw new Error(`Found non unique or inexistent value: ${message}`);
+        return values[0]!;
+    };
+}

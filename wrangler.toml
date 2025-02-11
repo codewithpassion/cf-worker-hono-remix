@@ -16,15 +16,10 @@ enabled = true
 
 [[d1_databases]]
 binding = "DB"
-database_name = "YOUR DB NAME"
+database_name = "App"
 database_id = "YOUR DB ID"
-migrations_dir = "packages/database/db/migrations"
+migrations_dir = "./migrations"
 
-
-[[durable_objects.bindings]]
-name = "DATABASE_OBJECT"
-class_name = "DatabaseObject"
-script_name = "worker-name"
 
 # # Durable Object migrations.
 # # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#migrations

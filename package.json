@@ -12,10 +12,13 @@
     "typecheck": "tsc",
     "typegen": "wrangler types",
     "preview": "bun run build && wrangler dev",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:apply:local": "wrangler d1 migrations apply App --local"
   },
   "dependencies": {
     "@prtctyai/database": "workspace:*",
+    "@prtctyai/auth": "workspace:*",
     "@react-router/cloudflare": "^7.1.5",
     "@remix-run/cloudflare": "^2.15.3",
     "@remix-run/react": "^2.15.3",

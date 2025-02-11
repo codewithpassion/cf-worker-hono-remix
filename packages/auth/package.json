@@ -1,0 +1,19 @@
+{
+  "name": "@prtctyai/auth",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "@prtctyai/database": "workspace:*"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.33",
+    "hono": "^4.7.0",
+    "nanoid": "^5.0.9",
+    "react": "^19.0.0",
+    "resend": "^4.1.2"
+  }
+}
