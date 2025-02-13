@@ -1,4 +1,3 @@
-// app/loaders/authenticated.loader.js
 import {  createCookie, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare"
 import { sessionStore } from "./sessionStore.server";
 
@@ -8,7 +7,6 @@ export async function loader({ request, context } : LoaderFunctionArgs) {
     const session = await getSession(request.headers.get("Cookie"));
     
     const user = session.get("user");
-    console.log("User", user);
   
     if (!user) {
       return redirect("/login");

@@ -1,7 +1,7 @@
 import {  createCookie,  redirect, ActionFunctionArgs } from "@remix-run/cloudflare"
-import { sessionStore } from "./sessionStore.server";
+import { sessionStore } from "../loaders/sessionStore.server";
 
-export async function logoutAction({ request, context } : ActionFunctionArgs) {
+export async function action({ request, context } : ActionFunctionArgs) {
 
     const cookie = createCookie("__session", { secrets: [context.cloudflare.env.JWT_SECRET] });
     const { getSession,destroySession } = sessionStore(context, cookie);

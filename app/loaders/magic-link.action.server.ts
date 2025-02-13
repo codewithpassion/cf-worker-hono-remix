@@ -27,7 +27,7 @@ export function getRoles(user: User) {
     return roles;
 }
 
-const unauthorized = Response.json({ error: "Unauthorized" }, { status: 401 });
+const unauthorized = () => Response.json({ error: "Unauthorized" }, { status: 401 });
 
 export async function action({ request, context }: ActionFunctionArgs) {
 
@@ -43,14 +43,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const user = await context.cloudflare.var.Repositories.user.findByEmail(result.data.email);
     if (!user) {
         console.log("User not found", result.data.email);
-        return unauthorized;
+        return unauthorized();
     }
 
 
     const roles = getRoles(user);
     if (roles.length === 0) {
         console.log("User is not a member or admin", user);
-        return unauthorized;
+        return unauthorized();
     }
 
     const token = randomBytes(32).toString("hex");
@@ -80,7 +80,7 @@ export async function verifyMagicLinkToken({ request, context, redirectTo, token
         console.info("Validating Magic link token", token);
 
         const magicLink = await context.cloudflare.var.Repositories.magicLinks.getByKey(token);
-        if (!magicLink) return unauthorized;
+        if (!magicLink) return unauthorized();
 
         if (new Date(magicLink.expiresAt) < new Date()) {
             console.warn(`Expired magic link attempt for email: ${magicLink.email}`);
@@ -88,7 +88,7 @@ export async function verifyMagicLinkToken({ request, context, redirectTo, token
             return Response.json({ error: "Magic link expired" }, { status: 401 });
         }
         const user = await context.cloudflare.var.Repositories.user.findByEmail(magicLink.email);
-        if (!user) return unauthorized;
+        if (!user) return unauthorized();
         await context.cloudflare.var.Repositories.magicLinks.delete(token);
         const roles = getRoles(user);
 
@@ -108,6 +108,6 @@ export async function verifyMagicLinkToken({ request, context, redirectTo, token
 
     } catch (error) {
         console.error("Error validating magic link", error);
-        return unauthorized;
+        return unauthorized();
     }
 }
