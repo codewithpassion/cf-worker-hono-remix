@@ -7,28 +7,28 @@ import { auth } from "@prtctyai/auth";
 import { EmailSenderMiddleware } from "packages/auth/middleware";
 import { EmailSender } from "packages/auth/email/sender";
 import { createMiddleware } from "hono/factory";
-import { UserRepo, TokensRepo, MagicLinksRepo } from "@prtctyai/database";
+import { UsersRepo, TokensRepo, MagicLinksRepo } from "@prtctyai/database";
 
 export type AppBindings = {
 	EmailSender: EmailSender,
 	Repositories: {
-		user: UserRepo,
+		users: UsersRepo,
 		token: TokensRepo,
-		magicLinks: MagicLinksRepo, 
+		magicLinks: MagicLinksRepo,
 		trucks: TrucksRepo
 	}
 } & DatabaseBindings
 
-type AppType =  {
+type AppType = {
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	Variables: {} & DBVariables & Env,
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	Bindings: AppBindings
-} 
+}
 
 const RepoMiddleware = createMiddleware(async (c, next) => {
-	c.set( 'Repositories', {
-		user: new UserRepo(c.var.Database),
+	c.set('Repositories', {
+		users: new UsersRepo(c.var.Database),
 		token: new TokensRepo(c.var.Database),
 		magicLinks: new MagicLinksRepo(c.var.Database),
 		trucks: new TrucksRepo(c.var.Database)
@@ -47,7 +47,7 @@ app.route("/api/auth", auth);
 
 app.get('/api', async (c) => {
 	const foo = await c.var.Database.select().from(users).all();
-	return c.json({ hello: 'world', foo})
+	return c.json({ hello: 'world', foo })
 })
 
 app.post("/api/seed", async (c) => {
@@ -95,7 +95,7 @@ app.use(
 			const remixContext = {
 				cloudflare: {
 					env: c.env,
-					var: c.var,				
+					var: c.var,
 				},
 			} as unknown as AppLoadContext
 			return handler(c.req.raw, remixContext)

@@ -1,11 +1,11 @@
-import { takeUniqueOrNull, trucks, trucks, users, type Database } from '@prtctyai/database';
+import { takeUniqueOrNull, trucks, users, type Database } from '@prtctyai/database';
 import { eq } from 'drizzle-orm';
 import type { ServiceDays } from '../db/schema';
 
 export type NewUser = typeof users.$inferInsert;
 export type UpdateUser = Omit<NewUser, 'id'>;
 
-export class UserRepo {
+export class UsersRepo {
     constructor(private database: Database) { }
 
     async getAll() {

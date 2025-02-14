@@ -17,7 +17,7 @@ export async function loader(args: LoaderFunctionArgs) {
         return redirect("/dashboard");
     }
 
-    const users = await args.context.cloudflare.var.Repositories.user.getAll();
+    const users = await args.context.cloudflare.var.Repositories.users.getAll();
     return { users };
 }
 
@@ -32,12 +32,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     if (intent === "delete") {
         const id = formData.get("id") as string;
-        await context.cloudflare.var.Repositories.user.delete(parseInt(id));
+        await context.cloudflare.var.Repositories.users.delete(parseInt(id));
         return json({ success: true });
     }
 
     if (intent === "create") {
-        await context.cloudflare.var.Repositories.user.insert({
+        await context.cloudflare.var.Repositories.users.insert({
             name,
             email,
             role,
@@ -48,7 +48,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     if (intent === "edit") {
         const id = formData.get("id") as string;
-        await context.cloudflare.var.Repositories.user.update(parseInt(id), {
+        await context.cloudflare.var.Repositories.users.update(parseInt(id), {
             name,
             email,
             role,
