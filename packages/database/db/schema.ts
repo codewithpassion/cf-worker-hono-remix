@@ -1,11 +1,13 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
+export const Roles = ["Super-Admin", "Admin", "User"] as const;
+export type Role = typeof Roles[number];
 export const users = sqliteTable("Users", {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   email: text().notNull().unique(),
-  role: text("role", { enum: ["Super-Admin", "Admin", "User"] }).notNull().default("User"),
+  role: text("role", { enum: Roles }).notNull().default("User"),
   isActive: int({ mode: 'boolean' }).notNull().default(true),
   createdAt: int({ mode: 'timestamp' }).notNull().default(sql`(strftime('%s','now'))`),
   updatedAt: int({ mode: 'timestamp' }).notNull().default(sql`(strftime('%s','now'))`).$onUpdate(() => new Date())

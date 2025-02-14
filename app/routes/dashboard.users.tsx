@@ -7,9 +7,17 @@ import { Button } from "~/components/ui/button";
 import { AddUserDialog } from "~/components/ui/add-user-dialog";
 import { EditUserDialog } from "~/components/ui/edit-user-dialog";
 import { DeleteUserDialog } from "~/components/ui/delete-user-dialog";
+import { requireUserRoles } from "~/loaders/authenticated.loader.server";
+import { redirect } from "react-router";
+import { Role } from "packages/database/db/schema";
 
-export async function loader({ context }: LoaderFunctionArgs) {
-    const users = await context.cloudflare.var.Repositories.user.getAll();
+
+export async function loader(args: LoaderFunctionArgs) {
+    if (((await requireUserRoles({ ...args, requiredRoles: ['Super-Admin'] }))) === false) {
+        return redirect("/dashboard");
+    }
+
+    const users = await args.context.cloudflare.var.Repositories.user.getAll();
     return { users };
 }
 
@@ -17,7 +25,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const formData = await request.formData();
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-    const role = formData.get("role") as "Super-Admin" | "Admin" | "User";
+    const role = formData.get("role") as Role;
     const isActive = formData.get("isActive") === "on";
 
     const intent = formData.get("intent");

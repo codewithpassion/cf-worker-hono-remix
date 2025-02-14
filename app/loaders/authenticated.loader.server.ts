@@ -1,17 +1,32 @@
-import {  createCookie, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare"
+import { createCookie, LoaderFunctionArgs, redirect } from "@remix-run/cloudflare"
 import { sessionStore } from "./sessionStore.server";
+import { Role } from "packages/database/db/schema";
 
-export async function loader({ request, context } : LoaderFunctionArgs) {
-    const cookie = createCookie("__session", { secrets: [context.cloudflare.env.JWT_SECRET] });
-    const { getSession } = sessionStore(context, cookie);
-    const session = await getSession(request.headers.get("Cookie"));
-    
-    const user = session.get("user");
-  
-    if (!user) {
-      return redirect("/login");
-    }
-  
-    return Response.json({ user });
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const cookie = createCookie("__session", { secrets: [context.cloudflare.env.JWT_SECRET] });
+  const { getSession } = sessionStore(context, cookie);
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const user = session.get("user");
+
+  if (!user) {
+    return redirect("/login");
   }
 
+  return { user };
+}
+
+
+export async function requireUserRoles({ request, context, requiredRoles }: LoaderFunctionArgs & { requiredRoles: Role[] }) {
+  const cookie = createCookie("__session", { secrets: [context.cloudflare.env.JWT_SECRET] });
+  const { getSession } = sessionStore(context, cookie);
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const user = session.get("user");
+
+  if (!user || !requiredRoles.includes(user.role)) {
+    return false;
+  }
+
+  return true;
+}
