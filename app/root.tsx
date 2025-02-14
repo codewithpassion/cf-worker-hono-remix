@@ -14,7 +14,6 @@ import "./tailwind.css";
 export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
   const theme = cookieHeader?.match(/theme=(dark|light|system)/)?.[1] || "system";
-  console.log("theme", theme);
   return { theme };
 };
 

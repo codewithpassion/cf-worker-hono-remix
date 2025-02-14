@@ -7,8 +7,8 @@ export const users = sqliteTable("Users", {
   email: text().notNull().unique(),
   role: text("role", { enum: ["Suer-Admin","Admin", "User"] }).notNull().default("User"),
   isActive: int({mode: 'boolean'}).notNull().default(true),
-  createdAt: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+  createdAt: int({mode: 'timestamp'}).notNull().default(sql`(strftime('%s','now'))`),
+  updatedAt: int({mode: 'timestamp'}).notNull().default(sql`(strftime('%s','now'))`).$onUpdate(() => new Date())
 });
 export type User = typeof users.$inferSelect;
 
@@ -16,14 +16,14 @@ export const tokens = sqliteTable("Tokens", {
   token: text().primaryKey(),
   email: text().notNull(),
   type: text("type", { enum: ["access", "refresh"] }).notNull(),
-  createdAt: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`),
+  createdAt: int({mode: 'timestamp'}).notNull().default(sql`(strftime('%s','now'))`),
 });
 export type Token = typeof tokens.$inferSelect;
 
 export const magicLinks = sqliteTable("MagicLinks", {
   token: text().notNull().primaryKey(),
   email: text().notNull(),
-  createdAt: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`),
+  createdAt: int({mode: 'timestamp'}).notNull().default(sql`(strftime('%s','now'))`),
   expiresAt: int({mode: 'timestamp'}).notNull(),
   redirectUrl: text().notNull(),
 });
@@ -39,8 +39,8 @@ export const trucks = sqliteTable("Trucks", {
   type: text("type", { enum: ["R", "C"] }).notNull(),
   isActive: int({mode: 'boolean'}).notNull().default(true),
   comment: text(),
-  created: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`),
-  updated: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+  created: int({mode: 'timestamp'}).notNull().default(sql`(strftime('%s','now'))`),
+  updated: int({mode: 'timestamp'}).notNull().default(sql`(strftime('%s','now'))`).$onUpdate(() => new Date())
 });
 export type Truck = typeof trucks.$inferSelect;
 export type NewTruck = typeof trucks.$inferInsert;

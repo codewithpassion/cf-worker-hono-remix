@@ -9,6 +9,7 @@ import { DeleteTruckDialog } from "~/components/ui/delete-truck-dialog";
 
 export async function loader({ context }: LoaderFunctionArgs) {
     const trucks = await context.cloudflare.var.Repositories.trucks.getAll();
+    console.log("trucks", trucks);
     return json({ trucks });
 }
 
