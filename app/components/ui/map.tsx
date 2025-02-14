@@ -5,11 +5,11 @@ import { Skeleton } from './skeleton';
 
 export function Map({ point, mapId }: { point?: MapPoint, mapId?: string }) {
     return (
-        <ClientOnly fallback={<Skeleton className='w-full h-[20vh]' />}>
+        <ClientOnly fallback={<Skeleton className='w-full h-full' />}>
             {() => (
                 <GMap
                     id={mapId}
-                    className='w-full h-[20vh]'
+                    className='w-full h-full'
                     defaultCenter={point || { lat: 42, lng: 0 }}
                     center={point}
                     defaultZoom={12}
