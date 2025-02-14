@@ -1,11 +1,13 @@
 export type { DatabaseBindings, DBVariables, Database } from './Database';
 export { DbMiddleware } from './Middleware';
 export {
-    users, tokens, trucks, magicLinks,
+    users, tokens, trucks, magicLinks, addresses,
     type User,
     type Token,
     type Truck,
-    type NewTruck
+    type NewTruck,
+    type Address,
+    type NewAddress
 } from './db/schema';
 
 import repo from './repo';
@@ -15,12 +17,14 @@ import { UsersRepo } from './repo/users-repo';
 import { TokensRepo } from './repo/token-repo';
 import { TrucksRepo } from './repo/trucks-repo';
 import { MagicLinksRepo } from './repo/magic-links-repo';
+import { AddressesRepo } from './repo/addresses-repo';
 
 export {
     UsersRepo,
     TokensRepo,
     TrucksRepo,
-    MagicLinksRepo
+    MagicLinksRepo,
+    AddressesRepo
 };
 
 

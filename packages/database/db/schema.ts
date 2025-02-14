@@ -1,4 +1,4 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
 export const Roles = ["Super-Admin", "Admin", "User"] as const;
@@ -48,3 +48,25 @@ export const trucks = sqliteTable("Trucks", {
 });
 export type Truck = typeof trucks.$inferSelect;
 export type NewTruck = typeof trucks.$inferInsert;
+
+
+// ---------------------------------------
+export type AddressConstraints = {
+  truck_id?: string;
+  serviceDay?: ServiceDays;
+  timeWindow?: { start: string, end: string };
+}
+export const addresses = sqliteTable("Addresses", {
+  id: int().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
+  address: text().notNull(),
+  gps: text({ mode: 'json' }).$type<{ lat: number, lng: number }>(),
+  constraints: text("constraints", { mode: 'json' }).$type<AddressConstraints>().default({}),
+  visits: int().notNull(),
+  allocatedTime: real().notNull(),
+  isActive: int({ mode: 'boolean' }).notNull().default(true),
+  created: int({ mode: 'timestamp' }).notNull().default(sql`(strftime('%s','now'))`),
+  updated: int({ mode: 'timestamp' }).notNull().default(sql`(strftime('%s','now'))`).$onUpdate(() => new Date())
+});
+export type Address = typeof addresses.$inferSelect;
+export type NewAddress = typeof addresses.$inferInsert;
