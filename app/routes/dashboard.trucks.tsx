@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
+import { type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -26,7 +26,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     if (intent === "delete") {
         const id = formData.get("id") as string;
         await context.cloudflare.var.Repositories.trucks.delete(parseInt(id));
-        return json({ success: true });
+        return { success: true };
     }
 
     if (intent === "create") {
@@ -37,7 +37,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
             comment: comment || null,
             isActive
         });
-        return json({ success: true });
+        return { success: true };
     }
 
     if (intent === "edit") {
@@ -49,8 +49,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
             comment: comment || null,
             isActive
         });
-        return json({ success: true });
+        return { success: true };
     }
+
+    return { success: false }
 }
 
 export default function TrucksPage() {

@@ -34,7 +34,7 @@ export type MagicLink = typeof magicLinks.$inferSelect;
 
 
 // ---------------------------------------
-export type ServiceDays = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+export type ServiceDays = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";
 export const trucks = sqliteTable("Trucks", {
   id: int().primaryKey({ autoIncrement: true }),
   truck_id: text().notNull().unique(),
