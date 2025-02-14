@@ -98,13 +98,6 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                         <div className="space-y-2">
                             <Label htmlFor="address">Address</Label>
                             <input id='address' type="hidden" name="address" value={address?.address} />
-                            {/* <Input
-                            id="address"
-                            name="address"
-                            required
-                            placeholder="Full address"
-                            defaultValue={address?.address}
-                        /> */}
                             <MapsAutocomplete address={address?.address} onPlaceSelect={(x) => {
                                 console.log(x);
                                 address!.address = x?.address || '';
@@ -113,7 +106,6 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                     lat: x?.location?.lat || 0,
                                     lng: x?.location?.lng || 0
                                 });
-
                             }}
                             />
                         </div>
@@ -206,36 +198,46 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                 <Label htmlFor="hasTimeWindow">Time window constraint (Optional)</Label>
                             </div>
                             {hasTimeWindow && (
-                                <div className="grid grid-cols-2 gap-4 mt-2">
-                                    <div>
-                                        <Label htmlFor="timeWindowStart">Start Time</Label>
-                                        <Input
-                                            id="timeWindowStart"
-                                            name="constraints.timeWindow.start"
-                                            type="time"
-                                            required
-                                            value={timeWindow.start}
-                                            onChange={(e) => setTimeWindow(prev => ({
-                                                ...prev,
-                                                start: e.target.value
-                                            }))}
-                                        />
+                                <>
+                                    <div className="grid grid-cols-2 gap-4 mt-2">
+                                        <div>
+                                            <Label htmlFor="timeWindowStart">Start Time</Label>
+                                            <Input
+                                                id="timeWindowStart"
+                                                type="time"
+                                                required
+                                                value={timeWindow.start}
+                                                onChange={(e) => setTimeWindow(prev => ({
+                                                    ...prev,
+                                                    start: e.target.value
+                                                }))}
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="constraints.timeWindow.start"
+                                                value={timeWindow.start}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label htmlFor="timeWindowEnd">End Time</Label>
+                                            <Input
+                                                id="timeWindowEnd"
+                                                type="time"
+                                                required
+                                                value={timeWindow.end}
+                                                onChange={(e) => setTimeWindow(prev => ({
+                                                    ...prev,
+                                                    end: e.target.value
+                                                }))}
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="constraints.timeWindow.end"
+                                                value={timeWindow.end}
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <Label htmlFor="timeWindowEnd">End Time</Label>
-                                        <Input
-                                            id="timeWindowEnd"
-                                            name="constraints.timeWindow.end"
-                                            type="time"
-                                            required
-                                            value={timeWindow.end}
-                                            onChange={(e) => setTimeWindow(prev => ({
-                                                ...prev,
-                                                end: e.target.value
-                                            }))}
-                                        />
-                                    </div>
-                                </div>
+                                </>
                             )}
                         </div>
 
@@ -245,11 +247,15 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                     <Label htmlFor="latitude">Latitude</Label>
                                     <Input
                                         id="latitude"
-                                        name="gps.lat"
                                         type="number"
                                         step="any"
                                         disabled
                                         placeholder="e.g. 41.8781"
+                                        value={gpsCoords?.lat || ''}
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="gps.lat"
                                         value={gpsCoords?.lat || ''}
                                     />
                                 </div>
@@ -257,11 +263,15 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                     <Label htmlFor="longitude">Longitude</Label>
                                     <Input
                                         id="longitude"
-                                        name="gps.lng"
                                         type="number"
                                         step="any"
                                         disabled
                                         placeholder="e.g. -87.6298"
+                                        value={gpsCoords?.lng || ''}
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="gps.lng"
                                         value={gpsCoords?.lng || ''}
                                     />
                                 </div>

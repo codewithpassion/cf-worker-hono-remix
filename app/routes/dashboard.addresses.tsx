@@ -1,6 +1,7 @@
 import { type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
+import { type ServiceDays } from "../../../packages/database/db/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Pencil } from "lucide-react";
@@ -18,13 +19,33 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
     const formData = await request.formData();
+    console.log("Form data", formData);
     const name = formData.get("name") as string;
     const address = formData.get("address") as string;
     const visits = formData.get("visits") as string;
     const allocatedTime = formData.get("allocatedTime") as string;
     const isActive = formData.get("isActive") === "on";
-    const gps = formData.get("gps") ? JSON.parse(formData.get("gps") as string) : null;
-    const constraints = formData.get("constraints") ? JSON.parse(formData.get("constraints") as string) : {};
+    // Parse GPS coordinates
+    const gps = {
+        lat: parseFloat(formData.get("gps.lat") as string),
+        lng: parseFloat(formData.get("gps.lng") as string)
+    };
+
+    // Parse constraints
+    const serviceDay = formData.get("constraints.serviceDay") as ServiceDays | undefined;
+    const timeWindowStart = formData.get("constraints.timeWindow.start") as string;
+    const timeWindowEnd = formData.get("constraints.timeWindow.end") as string;
+
+    const constraints = {
+        truck_id: formData.get("constraints.truck_id") as string || undefined,
+        serviceDay: serviceDay && ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].includes(serviceDay) ? serviceDay : undefined,
+        ...(timeWindowStart && timeWindowEnd ? {
+            timeWindow: {
+                start: timeWindowStart,
+                end: timeWindowEnd
+            }
+        } : {})
+    };
 
     const intent = formData.get("intent");
 
