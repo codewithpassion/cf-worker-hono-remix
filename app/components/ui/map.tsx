@@ -19,4 +19,4 @@ export function Map({ apiKey, point }: { apiKey: string, point?: MapPoint }) {
             )}
         </ClientOnly>
     );
-}   
+}

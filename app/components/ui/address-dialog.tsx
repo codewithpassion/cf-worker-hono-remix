@@ -49,6 +49,7 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
     const navigation = useNavigation();
     const [hasTimeWindow, setHasTimeWindow] = useState(!!address?.constraints?.timeWindow);
     const [hasGPS, setHasGPS] = useState(!!address?.gps);
+    const [gpsCoords, setGpsCoords] = useState<MapPoint | undefined>(address?.gps || undefined);
     const isEditing = !!address;
 
     useEffect(() => {
@@ -213,7 +214,12 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                 type="checkbox"
                                 id="hasGPS"
                                 checked={hasGPS}
-                                onChange={(e) => setHasGPS(e.target.checked)}
+                                onChange={(e) => {
+                                    setHasGPS(e.target.checked);
+                                    if (!e.target.checked) {
+                                        setGpsCoords(undefined);
+                                    }
+                                }}
                                 className="h-4 w-4 rounded border-gray-300"
                             />
                             <Label htmlFor="hasGPS">Has GPS Coordinates</Label>
@@ -229,7 +235,14 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                         step="any"
                                         required
                                         placeholder="e.g. 41.8781"
-                                        defaultValue={address?.gps?.lat}
+                                        value={gpsCoords?.lat || ''}
+                                        onChange={(e) => {
+                                            const lat = parseFloat(e.target.value);
+                                            setGpsCoords(prev => ({
+                                                lat,
+                                                lng: prev?.lng || 0
+                                            }));
+                                        }}
                                     />
                                 </div>
                                 <div>
@@ -241,13 +254,23 @@ export function AddressDialog({ address, trucks, children, apiKey }: AddressDial
                                         step="any"
                                         required
                                         placeholder="e.g. -87.6298"
-                                        defaultValue={address?.gps?.lng}
+                                        value={gpsCoords?.lng || ''}
+                                        onChange={(e) => {
+                                            const lng = parseFloat(e.target.value);
+                                            setGpsCoords(prev => ({
+                                                lat: prev?.lat || 0,
+                                                lng
+                                            }));
+                                        }}
                                     />
                                 </div>
                             </div>
                         )}
                     </div>
-                    <Map apiKey={apiKey} point={address?.gps || undefined} />
+                    <Map
+                        apiKey={apiKey}
+                        point={gpsCoords}
+                    />
 
                     <DialogFooter>
                         <Button variant="outline" type="button" onClick={() => setOpen(false)}>
