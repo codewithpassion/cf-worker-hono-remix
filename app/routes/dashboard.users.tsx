@@ -59,7 +59,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 }
 
 export default function UsersPage() {
-    const { users } = useLoaderData<typeof loader>();
+    const { users } = useLoaderData<{ users: User[] }>();
 
     return (
         <div className="flex flex-col gap-4 p-8">
