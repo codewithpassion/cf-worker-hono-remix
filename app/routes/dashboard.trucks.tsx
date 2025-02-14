@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json, type LoaderFunctionArgs, type ActionFunctionArgs} from "@remix-run/cloudflare";
 import { useLoaderData, Form } from "@remix-run/react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { AddTruckDialog } from "~/components/ui/add-truck-dialog";
@@ -9,8 +9,7 @@ import { DeleteTruckDialog } from "~/components/ui/delete-truck-dialog";
 
 export async function loader({ context }: LoaderFunctionArgs) {
     const trucks = await context.cloudflare.var.Repositories.trucks.getAll();
-    console.log("trucks", trucks);
-    return json({ trucks });
+    return { trucks };
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
