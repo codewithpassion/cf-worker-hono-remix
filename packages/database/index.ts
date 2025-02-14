@@ -4,7 +4,8 @@ export {
     users, tokens, trucks, magicLinks,
     type User, 
     type Token,
-    type Truck
+    type Truck,
+    type NewTruck
  } from './db/schema';
 
  import repo from './repo';

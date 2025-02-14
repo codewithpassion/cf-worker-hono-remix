@@ -8,6 +8,20 @@
       "when": 1739245775570,
       "tag": "0000_loud_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1739506725565,
+      "tag": "0001_gifted_blink",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1739507918256,
+      "tag": "0002_sharp_zzzax",
+      "breakpoints": true
     }
   ]
 }

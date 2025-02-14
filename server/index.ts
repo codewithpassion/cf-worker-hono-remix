@@ -30,7 +30,8 @@ const RepoMiddleware = createMiddleware(async (c, next) => {
 	c.set( 'Repositories', {
 		user: new UserRepo(c.var.Database),
 		token: new TokensRepo(c.var.Database),
-		magicLinks: new MagicLinksRepo(c.var.Database)
+		magicLinks: new MagicLinksRepo(c.var.Database),
+		trucks: new TrucksRepo(c.var.Database)
 	})
 	await next()
 })

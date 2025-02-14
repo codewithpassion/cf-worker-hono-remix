@@ -1,5 +1,7 @@
-import { takeUniqueOrNull, takeUniqueOrThrow, trucks, type Database, type Truck } from '@prtctyai/database';
-import { eq} from 'drizzle-orm';
+import { takeUniqueOrNull, takeUniqueOrThrow, trucks, type Database, type Truck, type NewTruck } from '@prtctyai/database';
+import { eq } from 'drizzle-orm';
+
+export type UpdateTruck = Omit<NewTruck, 'id'>;
 
 export class TrucksRepo {
     constructor(private database: Database) {}
@@ -10,7 +12,7 @@ export class TrucksRepo {
             .all();
     }
 
-    async insert(truck: Truck) {
+    async insert(truck: NewTruck) {
         return this.database
             .insert(trucks)
             .values(truck)
@@ -20,6 +22,14 @@ export class TrucksRepo {
     async delete(id: number) {
         return this.database
             .delete(trucks)
+            .where(eq(trucks.id, id))
+            .run();
+    }
+
+    async update(id: number, truck: UpdateTruck) {
+        return this.database
+            .update(trucks)
+            .set(truck)
             .where(eq(trucks.id, id))
             .run();
     }

@@ -124,6 +124,7 @@ export default function ProjectSidebar() {
                 </SidebarGroup>
                 )}
             </SidebarContent>
+            {false && (
             <SidebarFooter>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -141,6 +142,7 @@ export default function ProjectSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
+        )}
         </Sidebar>
     );
 }

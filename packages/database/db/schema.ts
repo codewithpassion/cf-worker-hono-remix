@@ -37,8 +37,10 @@ export const trucks = sqliteTable("Trucks", {
   truck_id: text().notNull().unique(),
   capacity: int().notNull(),
   type: text("type", { enum: ["R", "C"] }).notNull(),
+  isActive: int({mode: 'boolean'}).notNull().default(true),
   comment: text(),
   created: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`),
   updated: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
 });
 export type Truck = typeof trucks.$inferSelect;
+export type NewTruck = typeof trucks.$inferInsert;
