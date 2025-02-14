@@ -5,6 +5,7 @@ interface Env {
 	RESEND_API_KEY: string;
 	RESEND_FROM_EMAIL: string;
 	JWT_SECRET: string;
+	GOOGLE_MAPS_API_KEY: string;
 	DB: D1Database;
 	ASSETS: Fetcher;
 }

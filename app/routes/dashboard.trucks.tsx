@@ -2,8 +2,7 @@ import { type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/clo
 import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { AddTruckDialog } from "~/components/ui/add-truck-dialog";
-import { EditTruckDialog } from "~/components/ui/edit-truck-dialog";
+import { TruckDialog } from "~/components/ui/truck-dialog";
 import { Pencil } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { DeleteTruckDialog } from "~/components/ui/delete-truck-dialog";
@@ -91,7 +90,7 @@ export default function TrucksPage() {
                                 </Button>
                             </div>
                         </div>
-                        <AddTruckDialog trucks={trucks} />
+                        <TruckDialog mode="add" trucks={trucks} />
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -112,11 +111,11 @@ export default function TrucksPage() {
                                         </p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <EditTruckDialog truck={truck}>
+                                        <TruckDialog mode="edit" truck={truck}>
                                             <Button variant="ghost" size="icon" title="Edit truck">
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
-                                        </EditTruckDialog>
+                                        </TruckDialog>
                                         <DeleteTruckDialog truckId={truck.truck_id} id={truck.id} />
                                     </div>
                                 </div>

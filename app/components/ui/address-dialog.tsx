@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Form, useNavigation } from "@remix-run/react";
-import type { ServiceDays, AddressConstraints } from "packages/database/db/schema";
+import type { ServiceDays, AddressConstraints, MapPoint } from "packages/database/db/schema";
 import { Button } from "~/components/ui/button";
+import { Plus } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -13,24 +14,26 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Map } from "./map";
 
-interface EditAddressDialogProps {
-    address: {
+interface AddressDialogProps {
+    apiKey: string;
+    trucks: Array<{
+        truck_id: string;
+        type: "R" | "C";
+        isActive: boolean;
+    }>;
+    address?: {
         id: number;
         name: string;
         address: string;
         visits: number;
         allocatedTime: number;
         isActive: boolean;
-        gps: { lat: number; lng: number; } | null;
+        gps: MapPoint | null;
         constraints: AddressConstraints;
     };
-    trucks: Array<{
-        truck_id: string;
-        type: "R" | "C";
-        isActive: boolean;
-    }>;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 const SERVICE_DAYS: ServiceDays[] = [
@@ -41,11 +44,12 @@ const SERVICE_DAYS: ServiceDays[] = [
     "Friday"
 ];
 
-export function EditAddressDialog({ address, trucks, children }: EditAddressDialogProps) {
+export function AddressDialog({ address, trucks, children, apiKey }: AddressDialogProps) {
     const [open, setOpen] = useState(false);
     const navigation = useNavigation();
-    const [hasTimeWindow, setHasTimeWindow] = useState(!!address.constraints?.timeWindow);
-    const [hasGPS, setHasGPS] = useState(!!address.gps);
+    const [hasTimeWindow, setHasTimeWindow] = useState(!!address?.constraints?.timeWindow);
+    const [hasGPS, setHasGPS] = useState(!!address?.gps);
+    const isEditing = !!address;
 
     useEffect(() => {
         if (navigation.state === "idle" && open) {
@@ -56,18 +60,22 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                {children}
+                {children ?? (
+                    <Button size="icon">
+                        <Plus className="h-4 w-4" />
+                    </Button>
+                )}
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit Address</DialogTitle>
+                    <DialogTitle>{isEditing ? 'Edit Address' : 'Add New Address'}</DialogTitle>
                     <DialogDescription>
-                        Modify the details for this address.
+                        {isEditing ? 'Modify the details for this address.' : 'Enter the details for the new address.'}
                     </DialogDescription>
                 </DialogHeader>
                 <Form method="post" className="space-y-4">
-                    <input type="hidden" name="intent" value="edit" />
-                    <input type="hidden" name="id" value={address.id} />
+                    <input type="hidden" name="intent" value={isEditing ? "edit" : "create"} />
+                    {isEditing && <input type="hidden" name="id" value={address.id} />}
 
                     <div className="space-y-2">
                         <Label htmlFor="name">Name</Label>
@@ -75,7 +83,8 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                             id="name"
                             name="name"
                             required
-                            defaultValue={address.name}
+                            placeholder="Customer name"
+                            defaultValue={address?.name}
                         />
                     </div>
 
@@ -85,7 +94,8 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                             id="address"
                             name="address"
                             required
-                            defaultValue={address.address}
+                            placeholder="Full address"
+                            defaultValue={address?.address}
                         />
                     </div>
 
@@ -98,7 +108,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                 type="number"
                                 required
                                 min="1"
-                                defaultValue={address.visits}
+                                defaultValue={address?.visits ?? 1}
                             />
                         </div>
 
@@ -110,7 +120,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                 type="number"
                                 required
                                 min="1"
-                                defaultValue={address.allocatedTime}
+                                defaultValue={address?.allocatedTime ?? 15}
                             />
                         </div>
                     </div>
@@ -122,7 +132,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                 id="isActive"
                                 name="isActive"
                                 className="h-4 w-4 rounded border-gray-300"
-                                defaultChecked={address.isActive}
+                                defaultChecked={address?.isActive ?? true}
                             />
                             <Label htmlFor="isActive">Active</Label>
                         </div>
@@ -134,7 +144,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                             id="truck_id"
                             name="constraints.truck_id"
                             className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
-                            defaultValue={address.constraints?.truck_id || ""}
+                            defaultValue={address?.constraints?.truck_id || ""}
                         >
                             <option value="">Select a truck</option>
                             {trucks.filter(t => t.isActive).map((truck) => (
@@ -151,7 +161,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                             id="serviceDay"
                             name="constraints.serviceDay"
                             className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
-                            defaultValue={address.constraints?.serviceDay || ""}
+                            defaultValue={address?.constraints?.serviceDay || ""}
                         >
                             <option value="">Select a day</option>
                             {SERVICE_DAYS.map((day) => (
@@ -169,7 +179,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                 onChange={(e) => setHasTimeWindow(e.target.checked)}
                                 className="h-4 w-4 rounded border-gray-300"
                             />
-                            <Label htmlFor="hasTimeWindow">Has Time Window</Label>
+                            <Label htmlFor="hasTimeWindow">Time window constraint (Optional)</Label>
                         </div>
                         {hasTimeWindow && (
                             <div className="grid grid-cols-2 gap-4 mt-2">
@@ -180,7 +190,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                         name="constraints.timeWindow.start"
                                         type="time"
                                         required
-                                        defaultValue={address.constraints?.timeWindow?.start}
+                                        defaultValue={address?.constraints?.timeWindow?.start}
                                     />
                                 </div>
                                 <div>
@@ -190,7 +200,7 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                         name="constraints.timeWindow.end"
                                         type="time"
                                         required
-                                        defaultValue={address.constraints?.timeWindow?.end}
+                                        defaultValue={address?.constraints?.timeWindow?.end}
                                     />
                                 </div>
                             </div>
@@ -218,7 +228,8 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                         type="number"
                                         step="any"
                                         required
-                                        defaultValue={address.gps?.lat}
+                                        placeholder="e.g. 41.8781"
+                                        defaultValue={address?.gps?.lat}
                                     />
                                 </div>
                                 <div>
@@ -229,18 +240,20 @@ export function EditAddressDialog({ address, trucks, children }: EditAddressDial
                                         type="number"
                                         step="any"
                                         required
-                                        defaultValue={address.gps?.lng}
+                                        placeholder="e.g. -87.6298"
+                                        defaultValue={address?.gps?.lng}
                                     />
                                 </div>
                             </div>
                         )}
                     </div>
+                    <Map apiKey={apiKey} point={address?.gps || undefined} />
 
                     <DialogFooter>
                         <Button variant="outline" type="button" onClick={() => setOpen(false)}>
                             Cancel
                         </Button>
-                        <Button type="submit">Save Changes</Button>
+                        <Button type="submit">{isEditing ? 'Save Changes' : 'Add Address'}</Button>
                     </DialogFooter>
                 </Form>
             </DialogContent>

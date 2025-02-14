@@ -27,6 +27,7 @@ export class AddressesRepo {
     }
 
     async update(id: number, address: UpdateAddress) {
+        console.log("Updating address", id, address);
         return this.database
             .update(addresses)
             .set(address)

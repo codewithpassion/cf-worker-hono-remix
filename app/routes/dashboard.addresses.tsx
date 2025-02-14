@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Pencil } from "lucide-react";
-import { AddAddressDialog } from "~/components/ui/add-address-dialog";
-import { EditAddressDialog } from "~/components/ui/edit-address-dialog";
+import { AddressDialog } from "~/components/ui/address-dialog";
 import { DeleteAddressDialog } from "~/components/ui/delete-address-dialog";
 
 export async function loader({ context }: LoaderFunctionArgs) {
@@ -13,7 +12,8 @@ export async function loader({ context }: LoaderFunctionArgs) {
         context.cloudflare.var.Repositories.addresses.getAll(),
         context.cloudflare.var.Repositories.trucks.getAll()
     ]);
-    return { addresses, trucks };
+    const apiKey = context.cloudflare.env.GOOGLE_MAPS_API_KEY;
+    return { addresses, trucks, apiKey };
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -65,7 +65,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 }
 
 export default function AddressesPage() {
-    const { addresses, trucks } = useLoaderData<typeof loader>();
+    const { addresses, trucks, apiKey } = useLoaderData<typeof loader>();
     const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
 
     const filteredAddresses = addresses.filter(address =>
@@ -102,7 +102,7 @@ export default function AddressesPage() {
                                 </Button>
                             </div>
                         </div>
-                        <AddAddressDialog trucks={trucks} />
+                        <AddressDialog trucks={trucks} apiKey={apiKey} />
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -125,17 +125,18 @@ export default function AddressesPage() {
                                         </p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <EditAddressDialog
+                                        <AddressDialog
                                             address={{
                                                 ...address,
                                                 constraints: address.constraints || {}
                                             }}
+                                            apiKey={apiKey}
                                             trucks={trucks}
                                         >
                                             <Button variant="ghost" size="icon" title="Edit address">
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
-                                        </EditAddressDialog>
+                                        </AddressDialog>
                                         <DeleteAddressDialog
                                             name={address.name}
                                             address={address.address}

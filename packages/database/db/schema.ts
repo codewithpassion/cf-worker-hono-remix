@@ -51,6 +51,7 @@ export type NewTruck = typeof trucks.$inferInsert;
 
 
 // ---------------------------------------
+export type MapPoint = { lat: number, lng: number };
 export type AddressConstraints = {
   truck_id?: string;
   serviceDay?: ServiceDays;
@@ -60,7 +61,7 @@ export const addresses = sqliteTable("Addresses", {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   address: text().notNull(),
-  gps: text({ mode: 'json' }).$type<{ lat: number, lng: number }>(),
+  gps: text({ mode: 'json' }).$type<MapPoint>(),
   constraints: text("constraints", { mode: 'json' }).$type<AddressConstraints>().default({}),
   visits: int().notNull(),
   allocatedTime: real().notNull(),

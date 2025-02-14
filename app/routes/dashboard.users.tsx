@@ -4,8 +4,7 @@ import type { User } from "@prtctyai/database";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Pencil } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { AddUserDialog } from "~/components/ui/add-user-dialog";
-import { EditUserDialog } from "~/components/ui/edit-user-dialog";
+import { UserDialog } from "~/components/ui/user-dialog";
 import { DeleteUserDialog } from "~/components/ui/delete-user-dialog";
 import { requireUserRoles } from "~/loaders/authenticated.loader.server";
 import { redirect } from "react-router";
@@ -36,7 +35,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
         return json({ success: true });
     }
 
-    if (intent === "create") {
+    if (intent === "add") {
         await context.cloudflare.var.Repositories.users.insert({
             name,
             email,
@@ -67,7 +66,7 @@ export default function UsersPage() {
                 <CardHeader>
                     <div className="flex justify-between items-center">
                         <CardTitle>Users</CardTitle>
-                        <AddUserDialog />
+                        <UserDialog mode="add" />
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -86,11 +85,11 @@ export default function UsersPage() {
                                         </p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <EditUserDialog user={user}>
+                                        <UserDialog mode="edit" user={user}>
                                             <Button variant="ghost" size="icon" title="Edit user">
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
-                                        </EditUserDialog>
+                                        </UserDialog>
                                         <DeleteUserDialog id={user.id} name={user.name} />
                                     </div>
                                 </div>
