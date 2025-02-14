@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { reactRouter as remix } from 'remix-hono/handler'
 import type { AppLoadContext, RequestHandler } from '@remix-run/cloudflare'
 import { staticAssets } from "./staticAssets";
-import { DbMiddleware, TrucksRepo, users, type DatabaseBindings, type DBVariables } from "@prtctyai/database";
+import { AddressesRepo, DbMiddleware, TrucksRepo, users, type DatabaseBindings, type DBVariables } from "@prtctyai/database";
 import { auth } from "@prtctyai/auth";
 import { EmailSenderMiddleware } from "packages/auth/middleware";
 import { EmailSender } from "packages/auth/email/sender";
@@ -15,7 +15,8 @@ export type AppBindings = {
 		users: UsersRepo,
 		token: TokensRepo,
 		magicLinks: MagicLinksRepo,
-		trucks: TrucksRepo
+		trucks: TrucksRepo,
+		addresses: AddressesRepo
 	}
 } & DatabaseBindings
 
@@ -31,7 +32,8 @@ const RepoMiddleware = createMiddleware(async (c, next) => {
 		users: new UsersRepo(c.var.Database),
 		token: new TokensRepo(c.var.Database),
 		magicLinks: new MagicLinksRepo(c.var.Database),
-		trucks: new TrucksRepo(c.var.Database)
+		trucks: new TrucksRepo(c.var.Database),
+		addresses: new AddressesRepo(c.var.Database)
 	})
 	await next()
 })
