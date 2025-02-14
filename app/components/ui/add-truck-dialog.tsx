@@ -115,6 +115,9 @@ export function AddTruckDialog({ trucks }: AddTruckDialogProps) {
                         <Input id="comment" name="comment" />
                     </div>
                     <DialogFooter>
+                        <Button variant="outline" type="button" onClick={() => setOpen(false)}>
+                            Cancel
+                        </Button>
                         <Button type="submit">Add Truck</Button>
                     </DialogFooter>
                 </Form>

@@ -103,6 +103,9 @@ export function EditTruckDialog({ truck, children }: EditTruckDialogProps) {
                         />
                     </div>
                     <DialogFooter>
+                        <Button variant="outline" type="button" onClick={() => setOpen(false)}>
+                            Cancel
+                        </Button>
                         <Button type="submit">Save Changes</Button>
                     </DialogFooter>
                 </Form>

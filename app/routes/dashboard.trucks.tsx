@@ -5,14 +5,7 @@ import { AddTruckDialog } from "~/components/ui/add-truck-dialog";
 import { EditTruckDialog } from "~/components/ui/edit-truck-dialog";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "~/components/ui/dialog";
+import { DeleteTruckDialog } from "~/components/ui/delete-truck-dialog";
 
 export async function loader({ context }: LoaderFunctionArgs) {
     const trucks = await context.cloudflare.var.Repositories.trucks.getAll();
@@ -93,28 +86,7 @@ export default function TrucksPage() {
                                             <Pencil className="h-4 w-4" />
                                         </Button>
                                     </EditTruckDialog>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600" title="Delete truck">
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Delete Truck</DialogTitle>
-                                                <DialogDescription>
-                                                    Are you sure you want to delete Truck {truck.truck_id}? This action cannot be undone.
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <div className="flex justify-end gap-2">
-                                                <Form method="post">
-                                                    <input type="hidden" name="id" value={truck.id} />
-                                                    <input type="hidden" name="intent" value="delete" />
-                                                    <Button type="submit" variant="destructive">Delete</Button>
-                                                </Form>
-                                            </div>
-                                        </DialogContent>
-                                    </Dialog>
+                                    <DeleteTruckDialog truckId={truck.truck_id} id={truck.id} />
                                 </div>
                             </div>
                             ))}
