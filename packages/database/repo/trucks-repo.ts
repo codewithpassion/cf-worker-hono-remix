@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 export type UpdateTruck = Omit<NewTruck, 'id'>;
 
 export class TrucksRepo {
-    constructor(private database: Database) {}
+    constructor(private database: Database) { }
 
     async getAll() {
         return this.database

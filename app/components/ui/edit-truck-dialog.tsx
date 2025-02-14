@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Form, useNavigation } from "@remix-run/react";
+import type { ServiceDays } from "packages/database/db/schema";
 import { Button } from "~/components/ui/button";
 import {
     Dialog,
@@ -21,9 +22,18 @@ interface EditTruckDialogProps {
         capacity: number;
         comment: string | null;
         isActive: boolean;
+        serviceDays: ServiceDays[] | null;
     };
     children: React.ReactNode;
 }
+
+const SERVICE_DAYS: ServiceDays[] = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+];
 
 export function EditTruckDialog({ truck, children }: EditTruckDialogProps) {
     const [open, setOpen] = useState(false);
@@ -52,9 +62,9 @@ export function EditTruckDialog({ truck, children }: EditTruckDialogProps) {
                     <input type="hidden" name="id" value={truck.id} />
                     <div className="space-y-2">
                         <Label htmlFor="type">Type</Label>
-                        <select 
-                            id="type" 
-                            name="type" 
+                        <select
+                            id="type"
+                            name="type"
                             className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1"
                             required
                             defaultValue={truck.type}
@@ -65,20 +75,20 @@ export function EditTruckDialog({ truck, children }: EditTruckDialogProps) {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="truck_id">Truck ID</Label>
-                        <Input 
-                            id="truck_id" 
-                            name="truck_id" 
-                            required 
+                        <Input
+                            id="truck_id"
+                            name="truck_id"
+                            required
                             defaultValue={truck.truck_id}
                         />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="capacity">Capacity</Label>
-                        <Input 
-                            id="capacity" 
-                            name="capacity" 
-                            type="number" 
-                            required 
+                        <Input
+                            id="capacity"
+                            name="capacity"
+                            type="number"
+                            required
                             defaultValue={truck.capacity}
                         />
                     </div>
@@ -95,10 +105,28 @@ export function EditTruckDialog({ truck, children }: EditTruckDialogProps) {
                         </div>
                     </div>
                     <div className="space-y-2">
+                        <Label>Service Days</Label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {SERVICE_DAYS.map((day) => (
+                                <div key={day} className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`serviceDay-${day}`}
+                                        name="serviceDays"
+                                        value={day}
+                                        className="h-4 w-4 rounded border-gray-300"
+                                        defaultChecked={truck.serviceDays?.includes(day) ?? false}
+                                    />
+                                    <Label htmlFor={`serviceDay-${day}`}>{day}</Label>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="space-y-2">
                         <Label htmlFor="comment">Comment (Optional)</Label>
-                        <Input 
-                            id="comment" 
-                            name="comment" 
+                        <Input
+                            id="comment"
+                            name="comment"
                             defaultValue={truck.comment || ""}
                         />
                     </div>

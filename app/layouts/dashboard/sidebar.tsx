@@ -88,7 +88,7 @@ export default function ProjectSidebar() {
                     <SidebarGroupLabel>SECONDARY</SidebarGroupLabel>
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <NavLink to="/dashboard/addresses">
+                            <NavLink to="/dashboard/users">
                                 <SidebarMenuButton asChild={true}>
                                     <button type="button">
                                         <Users2 />
