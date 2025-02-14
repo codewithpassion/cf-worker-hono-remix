@@ -1,8 +1,39 @@
-import { takeUniqueOrNull, takeUniqueOrThrow, users, type Database } from '@prtctyai/database';
-import { eq} from 'drizzle-orm';
+import { takeUniqueOrNull, users, type Database } from '@prtctyai/database';
+import { eq } from 'drizzle-orm';
+
+export type NewUser = typeof users.$inferInsert;
+export type UpdateUser = Omit<NewUser, 'id'>;
 
 export class UserRepo {
     constructor(private database: Database) {}
+
+    async getAll() {
+        return this.database
+            .select().from(users)
+            .all();
+    }
+
+    async insert(user: NewUser) {
+        return this.database
+            .insert(users)
+            .values(user)
+            .run();
+    }
+
+    async delete(id: number) {
+        return this.database
+            .delete(users)
+            .where(eq(users.id, id))
+            .run();
+    }
+
+    async update(id: number, user: UpdateUser) {
+        return this.database
+            .update(users)
+            .set(user)
+            .where(eq(users.id, id))
+            .run();
+    }
 
     async findByEmail(email: string) {
         return this.database

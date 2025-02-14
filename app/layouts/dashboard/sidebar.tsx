@@ -1,7 +1,7 @@
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@radix-ui/react-collapsible";
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { NavLink } from "@remix-run/react";
-import { Gauge, Globe, ChevronDown, ContactRound, Info, Inbox, FolderOpen, List, Settings, Truck } from "lucide-react";
+import { Gauge, Globe, ChevronDown, ContactRound, Users2, Inbox, FolderOpen, List, Settings, Truck } from "lucide-react";
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton, SidebarFooter } from "~/components/ui/sidebar";
 import LogoutButton from "~/layouts/dashboard/logoutButton";
 
@@ -30,12 +30,12 @@ export default function ProjectSidebar() {
                     <SidebarMenu>
                         <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
                             <SidebarMenuItem>
-                            <NavLink to="/dashboard">
-                                <SidebarMenuButton tooltip="tooltip">
-                                    <Gauge></Gauge>
-                                    <span>Dashboard</span>
-                                </SidebarMenuButton>
-                            </NavLink>
+                                <NavLink to="/dashboard">
+                                    <SidebarMenuButton tooltip="tooltip">
+                                        <Gauge></Gauge>
+                                        <span>Dashboard</span>
+                                    </SidebarMenuButton>
+                                </NavLink>
                             </SidebarMenuItem>
                         </Collapsible>
                         <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
@@ -49,14 +49,14 @@ export default function ProjectSidebar() {
 
                             </SidebarMenuItem>
                         </Collapsible>
-                            <SidebarMenuItem>
-                                    <NavLink to="/dashboard/addresses">
-                                    <SidebarMenuButton tooltip="tooltip">
-                                        <ContactRound></ContactRound>
-                                        <span>Addresses</span>
-                                    </SidebarMenuButton>
-                                    </NavLink>
-                            </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <NavLink to="/dashboard/addresses">
+                                <SidebarMenuButton tooltip="tooltip">
+                                    <ContactRound></ContactRound>
+                                    <span>Addresses</span>
+                                </SidebarMenuButton>
+                            </NavLink>
+                        </SidebarMenuItem>
 
                         {/* <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
                             <SidebarMenuItem>
@@ -84,65 +84,66 @@ export default function ProjectSidebar() {
 
                     </SidebarMenu>
                 </SidebarGroup>
-                {false && (
                 <SidebarGroup>
                     <SidebarGroupLabel>SECONDARY</SidebarGroupLabel>
                     <SidebarMenu>
                         <SidebarMenuItem>
+                            <NavLink to="/dashboard/addresses">
+                                <SidebarMenuButton asChild={true}>
+                                    <button type="button">
+                                        <Users2 />
+                                        <span>Users</span>
+                                    </button>
+                                </SidebarMenuButton>
+                            </NavLink>
+                        </SidebarMenuItem>
+                        {false && (<>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild={true}>
+                                    <button type="button">
+                                        <Inbox></Inbox>
+                                        <span>Inbox</span>
+                                    </button>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild={true}>
+                                    <button type="button">
+                                        <FolderOpen></FolderOpen>
+                                        <span>File Manager</span>
+                                    </button>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild={true}>
+                                    <button type="button">
+                                        <List></List>
+                                        <span>Data List</span>
+                                    </button>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem></>)}
+                    </SidebarMenu>
+                </SidebarGroup>
+            </SidebarContent>
+            {false && (
+                <SidebarFooter>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
                             <SidebarMenuButton asChild={true}>
                                 <button type="button">
-                                    <Info></Info>
-                                    <span>Support Center</span>
+                                    <Settings></Settings>
+                                    <span>Settings</span>
                                 </button>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                         <SidebarMenuItem>
                             <SidebarMenuButton asChild={true}>
-                                <button type="button">
-                                    <Inbox></Inbox>
-                                    <span>Inbox</span>
-                                </button>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild={true}>
-                                <button type="button">
-                                    <FolderOpen></FolderOpen>
-                                    <span>File Manager</span>
-                                </button>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild={true}>
-                                <button type="button">
-                                    <List></List>
-                                    <span>Data List</span>
-                                </button>
+                                <LogoutButton />
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
-                </SidebarGroup>
-                )}
-            </SidebarContent>
-            {false && (
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild={true}>
-                            <button type="button">
-                                <Settings></Settings>
-                                <span>Settings</span>
-                            </button>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild={true}>
-                            <LogoutButton />
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
-        )}
+                </SidebarFooter>
+            )}
         </Sidebar>
     );
 }
