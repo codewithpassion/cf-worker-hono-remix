@@ -1,6 +1,27 @@
 export type { DatabaseBindings, DBVariables, Database } from './Database';
 export { DbMiddleware } from './Middleware';
-export { users, tokens, type User, type Token } from './db/schema';
+export { 
+    users, tokens, trucks, magicLinks,
+    type User, 
+    type Token,
+    type Truck
+ } from './db/schema';
+
+ import repo from './repo';
+ export { repo };
+
+ import { UserRepo } from './repo/user-repo';
+import { TokensRepo } from './repo/token-repo';
+import { TrucksRepo } from './repo/trucks-repo';
+import { MagicLinksRepo } from './repo/magic-links-repo';
+
+ export { 
+    UserRepo,
+    TokensRepo,
+    TrucksRepo,
+    MagicLinksRepo
+  };
+
 
 export const takeUniqueOrThrow = (message: string) => {
     return <T>(values: T[]): T => {

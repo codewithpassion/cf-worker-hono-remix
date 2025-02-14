@@ -14,6 +14,7 @@ import "./tailwind.css";
 export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
   const theme = cookieHeader?.match(/theme=(dark|light|system)/)?.[1] || "system";
+  console.log("theme", theme);
   return { theme };
 };
 
@@ -31,7 +32,7 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { theme } = useLoaderData<{ theme: "dark" | "light" | "system" }>();
+  const { theme } = useLoaderData<{ theme: "dark" | "light" | "system" }>() || { theme: "system" };
   return (
     <html lang="en" className={theme}>
       <head>

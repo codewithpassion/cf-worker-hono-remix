@@ -2,21 +2,20 @@ import { Hono } from "hono";
 import { reactRouter as remix } from 'remix-hono/handler'
 import type { AppLoadContext, RequestHandler } from '@remix-run/cloudflare'
 import { staticAssets } from "./staticAssets";
-import { DbMiddleware, users, type DatabaseBindings, type DBVariables } from "@prtctyai/database";
+import { DbMiddleware, TrucksRepo, users, type DatabaseBindings, type DBVariables } from "@prtctyai/database";
 import { auth } from "@prtctyai/auth";
-import { UserRepo } from "packages/auth/repo/user-repo";
 import { EmailSenderMiddleware } from "packages/auth/middleware";
 import { EmailSender } from "packages/auth/email/sender";
-import { TokensRepo } from "packages/auth/repo/token-repo";
-import { MagicLinksRepo } from "packages/auth/repo/magic-links-repo";
 import { createMiddleware } from "hono/factory";
+import { UserRepo, TokensRepo, MagicLinksRepo } from "@prtctyai/database";
 
 export type AppBindings = {
 	EmailSender: EmailSender,
 	Repositories: {
 		user: UserRepo,
 		token: TokensRepo,
-		magicLinks: MagicLinksRepo
+		magicLinks: MagicLinksRepo, 
+		trucks: TrucksRepo
 	}
 } & DatabaseBindings
 

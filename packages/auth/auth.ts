@@ -1,13 +1,11 @@
 import { type Context, Hono } from "hono";
 import { z } from "zod";
 import { sign, verify } from "hono/jwt";
-import { UserRepo } from "./repo/user-repo";
 import { randomBytes } from "crypto";
-import { MagicLinksRepo } from "./repo/magic-links-repo";
 import type { User } from "@prtctyai/database";
 import type { AppType } from "./types";
 import { EmailSenderMiddleware } from "./middleware";
-import { TokensRepo } from "./repo/token-repo";
+import { UserRepo, TokensRepo, MagicLinksRepo } from "@prtctyai/database";
 
 const AppName = "Test App";
 

@@ -28,3 +28,17 @@ export const magicLinks = sqliteTable("MagicLinks", {
   redirectUrl: text().notNull(),
 });
 export type MagicLink = typeof magicLinks.$inferSelect;
+
+
+
+// ---------------------------------------
+export const trucks = sqliteTable("Trucks", {
+  id: int().primaryKey({ autoIncrement: true }),
+  truck_id: text().notNull().unique(),
+  capacity: int().notNull(),
+  type: text("type", { enum: ["R", "C"] }).notNull(),
+  comment: text(),
+  created: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`),
+  updated: int({mode: 'timestamp'}).notNull().default(sql`(CURRENT_TIMESTAMP)`).$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+});
+export type Truck = typeof trucks.$inferSelect;

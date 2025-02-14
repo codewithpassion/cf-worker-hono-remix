@@ -1,6 +1,7 @@
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@radix-ui/react-collapsible";
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { Gauge, Globe, ChevronDown, ContactRound, Info, Inbox, FolderOpen, List, Settings } from "lucide-react";
+import { NavLink } from "@remix-run/react";
+import { Gauge, Globe, ChevronDown, ContactRound, Info, Inbox, FolderOpen, List, Settings, Truck } from "lucide-react";
 import { Sidebar, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton, SidebarFooter } from "~/components/ui/sidebar";
 import LogoutButton from "~/layouts/dashboard/logoutButton";
 
@@ -29,42 +30,43 @@ export default function ProjectSidebar() {
                     <SidebarMenu>
                         <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
                             <SidebarMenuItem>
+                            <NavLink to="/dashboard">
                                 <SidebarMenuButton tooltip="tooltip">
                                     <Gauge></Gauge>
                                     <span>Dashboard</span>
                                 </SidebarMenuButton>
+                            </NavLink>
                             </SidebarMenuItem>
                         </Collapsible>
                         <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
                             <SidebarMenuItem>
-                                <CollapsibleTrigger asChild={true}>
+                                <NavLink to="/dashboard/trucks">
                                     <SidebarMenuButton tooltip="tooltip">
-                                        <Globe></Globe>
-                                        <span>Projects</span>
-                                        <ChevronDown className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"></ChevronDown>
+                                        <Truck />
+                                        <span>Trucks</span>
                                     </SidebarMenuButton>
-                                </CollapsibleTrigger>
-                                <CollapsibleContent>
-                                    <SidebarMenuSub>
-                                        <SidebarMenuSubItem>
-                                            <SidebarMenuSubButton asChild={true}>
-                                                <button type="button">
-                                                    <span>Rick Miller</span>
-                                                </button>
-                                            </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    </SidebarMenuSub>
-                                </CollapsibleContent>
+                                </NavLink>
+
                             </SidebarMenuItem>
                         </Collapsible>
-                        <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
                             <SidebarMenuItem>
-                                <CollapsibleTrigger asChild={true}>
+                                    <NavLink to="/dashboard/addresses">
                                     <SidebarMenuButton tooltip="tooltip">
                                         <ContactRound></ContactRound>
-                                        <span>Users</span>
-                                        <ChevronDown className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"></ChevronDown>
+                                        <span>Addresses</span>
                                     </SidebarMenuButton>
+                                    </NavLink>
+                            </SidebarMenuItem>
+
+                        {/* <Collapsible asChild={true} defaultOpen={false} className="group/collapsible">
+                            <SidebarMenuItem>
+                                <CollapsibleTrigger asChild={true}>
+                                    <NavLink to="/dashboard/addresses">
+                                    <SidebarMenuButton tooltip="tooltip">
+                                        <ContactRound></ContactRound>
+                                        <span>Addresses</span>
+                                    </SidebarMenuButton>
+                                    </NavLink>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                     <SidebarMenuSub>
@@ -78,9 +80,11 @@ export default function ProjectSidebar() {
                                     </SidebarMenuSub>
                                 </CollapsibleContent>
                             </SidebarMenuItem>
-                        </Collapsible>
+                        </Collapsible> */}
+
                     </SidebarMenu>
                 </SidebarGroup>
+                {false && (
                 <SidebarGroup>
                     <SidebarGroupLabel>SECONDARY</SidebarGroupLabel>
                     <SidebarMenu>
@@ -118,6 +122,7 @@ export default function ProjectSidebar() {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
@@ -131,7 +136,7 @@ export default function ProjectSidebar() {
                     </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild={true}>
-                            <LogoutButton />                        
+                            <LogoutButton />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
